@@ -1,0 +1,27 @@
+<p>
+  A comment has been flagged for moderation by the following users...
+<p>
+{{#flagged_by}}
+<p>
+  <strong>User:</strong>
+  <a href="{{&url}}">{{id}}</a>
+  <br />
+  <strong>Reason:</strong>
+  <br />
+  {{reason}}
+</p>
+{{/flagged_by}}
+--------------------------
+</p>
+<p>
+  <strong>Comment Author:</strong>
+</p>
+<p>
+  {{comment_data.user}}
+</p>
+<p>
+  <strong>Comment Body:</strong>
+</p>
+<p>
+  {{comment_data.content}}
+</p>

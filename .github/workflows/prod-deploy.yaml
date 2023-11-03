@@ -1,0 +1,29 @@
+name: Deploy to Production
+'on':
+  push:
+    branches:
+      - production
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: GitHub Packages Authentication
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PACKAGES_AUTH_TOKEN }}" >> .npmrc
+        working-directory: ./functions
+      - name: 'Create .env file'
+        run: |
+          echo "${{ secrets.ENV_PROD }}" > .env
+        working-directory: ./functions
+      - name: 'Install Dependencies'
+        working-directory: ./functions
+        run: npm ci
+      - name: Build and Deploy to Firebase
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN_PROD }}
+        run:
+          npx firebase-tools deploy --only hosting,functions,firestore,storage --project
+          govside-firebase --non-interactive --force
